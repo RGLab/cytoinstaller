@@ -4,17 +4,10 @@
 \alias{cyto_remote}
 \title{construct a 'cyto_remote' object}
 \usage{
-cyto_remote(
-  pkg,
-  owner = getOption("cyto_repo_owner"),
-  type = getOption("pkgType"),
-  ...
-)
+cyto_remote(pkg, type = getOption("pkgType"), ...)
 }
 \arguments{
 \item{pkg}{package name}
-
-\item{owner}{github repo owner}
 }
 \description{
 It queries the remote github repo and fetch the packager versions and download url

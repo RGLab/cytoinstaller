@@ -5,14 +5,14 @@
 #' packages in a single command.
 #'
 #' @param pkgs Character vector of packages to install.
-#' @param owner the github owner
+#' @importFrom remotes install_remote
 #' @export
 #' @family package installation
 #' @examples
 #' \dontrun{
 #' install_cyto("ggcyto")
 #' }
-install_cyto <- function(pkgs, owner = getOption("cyto_repo_owner"), type = getOption("pkgType"),
+install_cyto <- function(pkg, type = getOption("pkgType"),
                          dependencies = NA,
                          upgrade = c("default", "ask", "always", "never"),
                          force = FALSE,
@@ -22,13 +22,21 @@ install_cyto <- function(pkgs, owner = getOption("cyto_repo_owner"), type = getO
                          ...) {
   if(!isFALSE(dependencies))
   {
-    cyto_install_deps()
+    cyto_install_deps(pkg,
+                      dependencies = dependencies,
+                      upgrade = upgrade,
+                      force = force,
+                      quiet = quiet,
+                      build = build,
+                      build_opts = build_opts,
+                      build_manual = build_manual,
+                      build_vignettes = build_vignettes,
+                      type = type,
+                      ...)
   }
-  remotes <- lapply(pkgs, cyto_remote, owner = owner
-                    , type = type
-                    )
+  remote <- cyto_remote(pkg, type = type)
 
-  remotes:::install_remotes(remotes,
+  install_remote(remote,
                   dependencies = dependencies,
                   upgrade = upgrade,
                   force = force,
@@ -46,13 +54,11 @@ install_cyto <- function(pkgs, owner = getOption("cyto_repo_owner"), type = getO
 #'
 #' It queries the remote github repo and fetch the packager versions and download url
 #' @param pkg package name
-#' @param owner github repo owner
 #' @export
 #' @examples
-#' remote <- cyto_remote("ggcyto")
-#' remote_package_name(remote)
-cyto_remote <- function(pkg, owner = getOption("cyto_repo_owner"), type = getOption("pkgType"), ...) {
-
+#' cyto_remote("ggcyto")
+cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
+  owner = getOption("cyto_repo_owner")
   res <- cyto_pkg_github_url(pkg, owner)
   res <- remotes:::remote("cran",
          name = pkg,

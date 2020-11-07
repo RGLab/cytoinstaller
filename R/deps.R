@@ -1,19 +1,19 @@
 options("cyto_repo_owner" = "mikejiang")
 options("cyto_repos" = c("ggcyto", "flowWorkspace"))
 #' @param pkg the package name
-#' @param owner the github owner
 #' @param ... arguments passed to remotes::dev_package_deps
 #' @importFrom remotes dev_package_deps
 #' @export
 #' @examples
 #' cyto_pkg_deps("ggcyto")
-cyto_pkg_deps <- function(pkg, owner = getOption("cyto_repo_owner"), ...)
+cyto_pkg_deps <- function(pkg, ...)
 {
   #download DESC file
   pkdir <- tempfile()
   dir.create(pkdir)
   bioc_ver = bioc_version()
   branch <- paste0("bioc_", bioc_ver)
+  owner = getOption("cyto_repo_owner")
   url <- file.path("https://raw.githubusercontent.com", owner, pkg, branch, "DESCRIPTION")
   download.file(url, file.path(pkdir, "DESCRIPTION"), quiet = TRUE)
   #get deps from public repos (cran, bioc)

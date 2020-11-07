@@ -5,7 +5,7 @@
 \title{Attempts to install a package from cyto repo}
 \usage{
 install_cyto(
-  pkgs,
+  pkg,
   owner = getOption("cyto_repo_owner"),
   type = getOption("pkgType"),
   dependencies = NA,
@@ -20,9 +20,9 @@ install_cyto(
 )
 }
 \arguments{
-\item{pkgs}{Character vector of packages to install.}
-
 \item{owner}{the github owner}
+
+\item{pkgs}{Character vector of packages to install.}
 }
 \description{
 This function is vectorised on `pkgs` so you can install multiple
