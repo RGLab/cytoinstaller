@@ -20,7 +20,10 @@ install_cyto <- function(pkgs, owner = getOption("cyto_repo_owner"), type = getO
                          build = TRUE, build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"),
                          build_manual = FALSE, build_vignettes = FALSE,
                          ...) {
-
+  if(!isFALSE(dependencies))
+  {
+    cyto_install_deps()
+  }
   remotes <- lapply(pkgs, cyto_remote, owner = owner
                     , type = type
                     )
