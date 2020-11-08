@@ -1,5 +1,4 @@
-options("cyto_repo_owner" = "mikejiang")
-options("cyto_repos" = c("ggcyto", "flowWorkspace"))
+
 #' @param pkg the package name
 #' @param ... arguments passed to remotes::dev_package_deps
 #' @importFrom remotes dev_package_deps
