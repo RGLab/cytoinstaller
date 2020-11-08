@@ -4,7 +4,7 @@
 #' This function is vectorised on `pkgs` so you can install multiple
 #' packages in a single command.
 #'
-#' @param pkgs Character vector of packages to install.
+#' @inheritParams cyto_install_deps
 #' @importFrom remotes install_remote
 #' @export
 #' @family package installation
@@ -22,7 +22,11 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
                          ...) {
   if(!isFALSE(dependencies))
   {
-    cyto_install_deps(pkg,
+    pkgdir <- desc_to_local(pkg)
+    on.exit({
+      unlink(pkgdir, recursive = TRUE)
+    })
+    cyto_install_deps(pkgdir,
                       dependencies = dependencies,
                       upgrade = upgrade,
                       force = force,
@@ -53,10 +57,12 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
 #' construct a 'cyto_remote' object
 #'
 #' It queries the remote github repo and fetch the packager versions and download url
-#' @param pkg package name
+#' @inheritParams cyto_install_deps
 #' @export
 #' @examples
+#' \dontrun{
 #' cyto_remote("ggcyto")
+#' }
 cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
   owner = getOption("cyto_repo_owner")
   res <- cyto_pkg_github_url(pkg, owner)
@@ -73,6 +79,11 @@ cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
 #' query cyto repo for the package version and its download url
 #' @param pkgs the name of packages to query
 #' @export
+#' @examples
+#' \dontrun{
+#' cyto_repo("ggcyto")
+#' cyto_repo()#print all available cyto packages
+#' }
 cyto_repo <- function(pkgs = getOption("cyto_repos"))
 {
   do.call(rbind, lapply(pkgs, function(pkg){
@@ -102,10 +113,7 @@ as_tibble.cyto_remote <- function(x, ...) {
   as_tibble(x[c("name", "ver", "url")])
 }
 
-#' @export
-print.cyto_remote <- function(x, ...) {
-  print(as_tibble(x))
-}
+
 #' get the download url of the package hosted as github release assets
 #'
 #' @param pkg the package name

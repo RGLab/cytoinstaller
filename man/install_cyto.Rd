@@ -19,7 +19,16 @@ install_cyto(
 )
 }
 \arguments{
-\item{pkgs}{Character vector of packages to install.}
+\item{build}{If `TRUE` build the package before installing.}
+
+\item{build_opts}{Options to pass to `R CMD build`, only used when `build`}
+
+\item{build_manual}{If `FALSE`, don't build PDF manual ('--no-manual').}
+
+\item{build_vignettes}{If `FALSE`, don't build package vignettes ('--no-build-vignettes').
+is `TRUE}
+
+\item{...}{additional arguments passed to [utils::install.packages()].}
 }
 \description{
 This function is vectorised on `pkgs` so you can install multiple

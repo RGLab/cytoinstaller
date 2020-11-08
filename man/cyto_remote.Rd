@@ -7,11 +7,13 @@
 cyto_remote(pkg, type = getOption("pkgType"), ...)
 }
 \arguments{
-\item{pkg}{package name}
+\item{...}{additional arguments passed to [utils::install.packages()].}
 }
 \description{
 It queries the remote github repo and fetch the packager versions and download url
 }
 \examples{
+\dontrun{
 cyto_remote("ggcyto")
+}
 }
