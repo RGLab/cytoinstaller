@@ -13,6 +13,5 @@ cyto_remote(pkg, type = getOption("pkgType"), ...)
 It queries the remote github repo and fetch the packager versions and download url
 }
 \examples{
-remote <- cyto_remote("ggcyto")
-remote_package_name(remote)
+cyto_remote("ggcyto")
 }

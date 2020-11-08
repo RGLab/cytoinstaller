@@ -70,6 +70,16 @@ cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
   res
 }
 
+#' query cyto repo for the package version and its download url
+#' @param pkgs the name of packages to query
+#' @export
+cyto_repo <- function(pkgs = getOption("cyto_repos"))
+{
+  do.call(rbind, lapply(pkgs, function(pkg){
+                        as_tibble(cyto_remote(pkg))
+                      })
+  )
+}
 #' @importFrom remotes remote_package_name
 #' @export
 remote_package_name.cyto_remote <- function(remote, ...) {
@@ -87,6 +97,15 @@ format.cyto_remote <- function(x, ...) {
   "CYTO"
 }
 
+#' @importFrom tibble as_tibble
+as_tibble.cyto_remote <- function(x, ...) {
+  as_tibble(x[c("name", "ver", "url")])
+}
+
+#' @export
+print.cyto_remote <- function(x, ...) {
+  print(as_tibble(x))
+}
 #' get the download url of the package hosted as github release assets
 #'
 #' @param pkg the package name

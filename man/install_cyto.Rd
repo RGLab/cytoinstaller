@@ -6,7 +6,6 @@
 \usage{
 install_cyto(
   pkg,
-  owner = getOption("cyto_repo_owner"),
   type = getOption("pkgType"),
   dependencies = NA,
   upgrade = c("default", "ask", "always", "never"),
@@ -20,8 +19,6 @@ install_cyto(
 )
 }
 \arguments{
-\item{owner}{the github owner}
-
 \item{pkgs}{Character vector of packages to install.}
 }
 \description{

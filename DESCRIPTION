@@ -6,8 +6,7 @@ Maintainer: Mike Jiang <wjiang2@fredhutch.org>
 Description: A convenient tool to install and update cyto packages.
 Imports:
   remotes,
-  gh,
-  dplyr
+  gh
 Suggests:
   testthat,
   knitr
