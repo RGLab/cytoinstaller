@@ -11,7 +11,7 @@
 #' \dontrun{
 #' cyto_pkg_deps("../ggcyto/")
 #' }
-cyto_pkg_deps <- function(pkdir, ...)
+cyto_pkg_deps <- function(pkdir = ".", ...)
 {
 
     #get deps from public repos (cran, bioc)
@@ -73,7 +73,7 @@ desc_to_local <- function(pkg){
 #' \dontrun{
 #' cyto_install_deps("../ggcyto")
 #' }
-cyto_install_deps <- function(pkgdir, dependencies = NA,
+cyto_install_deps <- function(pkgdir = ".", dependencies = NA,
                          repos = getOption("repos"),
                          type = getOption("pkgType"),
                          upgrade = c("default", "ask", "always", "never"),
