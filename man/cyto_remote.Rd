@@ -7,7 +7,7 @@
 cyto_remote(pkg, type = getOption("pkgType"), ...)
 }
 \arguments{
-\item{...}{additional arguments passed to [utils::install.packages()].}
+\item{...}{arguments passed to [cyto_pkg_github_url]}
 }
 \description{
 It queries the remote github repo and fetch the packager versions and download url

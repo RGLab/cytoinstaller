@@ -4,17 +4,13 @@
 \alias{cyto_repo}
 \title{query cyto repo for the package version and its download url}
 \usage{
-cyto_repo(pkgs = getOption("cyto_repos"))
+cyto_repo(pkgs = getOption("cyto_repos"), ...)
 }
 \arguments{
 \item{pkgs}{the name of packages to query}
+
+\item{...}{arguments passed to [cyto_remote]}
 }
 \description{
 query cyto repo for the package version and its download url
-}
-\examples{
-\dontrun{
-cyto_repo("ggcyto")
-cyto_repo()#print all available cyto packages
-}
 }

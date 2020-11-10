@@ -58,6 +58,7 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
 #'
 #' It queries the remote github repo and fetch the packager versions and download url
 #' @inheritParams cyto_install_deps
+#' @param ... arguments passed to [cyto_pkg_github_url]
 #' @export
 #' @examples
 #' \dontrun{
@@ -65,12 +66,13 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
 #' }
 cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
   owner = getOption("cyto_repo_owner")
-  res <- cyto_pkg_github_url(pkg, owner)
+  res <- cyto_pkg_github_url(pkg, owner, ...)
   res <- remotes:::remote("cran",
          name = pkg,
          repo = NULL,
          ver = res[["ver"]],
          url = res[["url"]],
+         bioc_ver = res[["bioc_ver"]],
          pkg_type = type)
   class(res) <- c("cyto_remote", class(res))
   res
@@ -78,16 +80,18 @@ cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
 
 #' query cyto repo for the package version and its download url
 #' @param pkgs the name of packages to query
+#' @param ... arguments passed to [cyto_remote]
 #' @export
 #' @examples
 #' \dontrun{
 #' cyto_repo("ggcyto")
 #' cyto_repo()#print all available cyto packages
+#' cyto_repo(bioc_ver = "3.13")
 #' }
-cyto_repo <- function(pkgs = getOption("cyto_repos"))
+cyto_repo <- function(pkgs = getOption("cyto_repos"), ...)
 {
   do.call(rbind, lapply(pkgs, function(pkg){
-                        as_tibble(cyto_remote(pkg))
+                        as_tibble(cyto_remote(pkg, ...))
                       })
   )
 }
@@ -110,7 +114,7 @@ format.cyto_remote <- function(x, ...) {
 
 #' @importFrom tibble as_tibble
 as_tibble.cyto_remote <- function(x, ...) {
-  as_tibble(x[c("name", "ver", "url")])
+  as_tibble(x[c("name", "ver", "url", "bioc_ver")])
 }
 
 
@@ -146,5 +150,5 @@ cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_
     asset <- assets[[which(idx)]]
 
   ver <- sub(paste0("^", pkg, "_"), "", sub(paste0("\\.", suffix, "$"), "",  asset[["name"]]))
-  list(ver = ver, url = asset[["browser_download_url"]])
+  list(ver = ver, url = asset[["browser_download_url"]], bioc_ver = bioc_ver)
 }
