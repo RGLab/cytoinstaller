@@ -67,14 +67,19 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
 cyto_remote <- function(pkg, type = getOption("pkgType"), ...) {
   owner = getOption("cyto_repo_owner")
   res <- cyto_pkg_github_url(pkg, owner, ...)
-  res <- remotes:::remote("cran",
-         name = pkg,
-         repo = NULL,
-         ver = res[["ver"]],
-         url = res[["url"]],
-         bioc_ver = res[["bioc_ver"]],
-         pkg_type = type)
-  class(res) <- c("cyto_remote", class(res))
+  if(!is.null(res))
+  {
+
+    res <- remotes:::remote("cran",
+           name = pkg,
+           repo = NULL,
+           ver = res[["ver"]],
+           url = res[["url"]],
+           bioc_ver = res[["bioc_ver"]],
+           pkg_type = type)
+    class(res) <- c("cyto_remote", class(res))
+
+  }
   res
 }
 
@@ -129,7 +134,17 @@ as_tibble.cyto_remote <- function(x, ...) {
 #' cyto_pkg_github_url("ggcyto")
 cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_ver = bioc_version())
 {
-  releaseid <- gh("GET /repos/:owner/:repo/releases/tags/:tag", owner = owner, repo = pkg, tag = paste0("bioc_",bioc_ver))$id
+  releaseid <- try(gh("GET /repos/:owner/:repo/releases/tags/:tag"
+                      , owner = owner, repo = pkg, tag = paste0("bioc_",bioc_ver)
+                      )$id
+                   , silent = TRUE)
+  if(is(releaseid, "try-error"))
+ {
+     if(grepl("404 Not Found", releaseid))
+       return(NULL)
+    else
+      stop(releaseid)
+  }
   assets <- gh("GET /repos/:owner/:repo/releases/:release_id/assets", owner = owner, repo = pkg, release_id = releaseid)
   suffix <- switch(Sys.info()[['sysname']],
                    Linux = "tar\\.gz",
@@ -141,10 +156,10 @@ cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_
   idx <- grepl(pkg_bin, asset.names)
   nfiles <- sum(idx)
   if(nfiles == 0)
-    return(NA)
+    return(NULL)
   else if(nfiles > 1)
   {
-    return(NA)#todo: maybe get the latest version
+    return(NULL)#todo: maybe get the latest version
   }else
 
     asset <- assets[[which(idx)]]

@@ -14,3 +14,10 @@ cyto_repo(pkgs = getOption("cyto_repos"), ...)
 \description{
 query cyto repo for the package version and its download url
 }
+\examples{
+\dontrun{
+cyto_repo("ggcyto")
+cyto_repo()#print all available cyto packages
+cyto_repo(bioc_ver = "3.13")
+}
+}

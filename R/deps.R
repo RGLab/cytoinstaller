@@ -28,15 +28,18 @@ cyto_pkg_deps <- function(pkdir = ".", ...)
 
       #compare the public remote with cytorepo
       remote_new <- cyto_remote(package) #fetch pkg info from cyto remote repo
-      ver <- remote_sha(remote_new)
-      diff1 <- remotes:::compare_versions(remote_sha(remote), ver, is_cran = TRUE)
-      #replace the public remote by cyto remote when it is behind
-      if(diff1 %in% c(remotes:::BEHIND, remotes:::UNINSTALLED))
+      if(!is.null(remote_new))
       {
-        deps[i, "available"] = ver
-        deps[i, "diff"] = diff1
-        deps[i, "is_cran"] = FALSE
-        deps[i, ][["remote"]][[1]] = remote_new
+        ver <- remote_sha(remote_new)
+        diff1 <- remotes:::compare_versions(remote_sha(remote), ver, is_cran = TRUE)
+        #replace the public remote by cyto remote when it is behind
+        if(diff1 %in% c(remotes:::BEHIND, remotes:::UNINSTALLED))
+        {
+          deps[i, "available"] = ver
+          deps[i, "diff"] = diff1
+          deps[i, "is_cran"] = FALSE
+          deps[i, ][["remote"]][[1]] = remote_new
+        }
       }
     }
 
