@@ -131,7 +131,9 @@ as_tibble.cyto_remote <- function(x, ...) {
 #' @importFrom gh gh
 #' @importFrom remotes bioc_version
 #' @examples
+#' \dontrun{
 #' cyto_pkg_github_url("ggcyto")
+#' }
 cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_ver = bioc_version())
 {
   releaseid <- try(gh("GET /repos/:owner/:repo/releases/tags/:tag"
