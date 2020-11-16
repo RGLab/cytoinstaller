@@ -1,15 +1,51 @@
 ---
-title: "build status"
+title: "cytoinstaller"
 author: "mike"
 date: "11/15/2020"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
+
+
+This package is a lightweight wrapper of some functions in [`remotes`](https://github.com/r-lib/remotes).
+It installs the most recent version of cyto packages from the common public repositories e.g. Bioconductor, CRAN,  as well as `CYTO` repository, which provides the cyto packages built by github actions triggered by pushed commits. 
+
+## Installation
+
+Install the released version of remotes from CRAN:
+
+```r
+remotes::install_github("RGLab/cytoinstaller")
+```
+
+## Usage
+
+To install the latest version of a cyto package (and also install or update its dependencies.)
+
+```r
+cytoinstaller::install_cyto("ggcyto")
+```
+
+To get the package info from `CYTO` repo,
+
+```r
+cytoinstaller::cyto_repo("ggcyto")
+```
+
+To list all the package info,
+
+```r
+cytoinstaller::cyto_repo()
+```
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, echo=FALSE, include=FALSE}
 library(cytoinstaller)
 library(kableExtra)
 library(dplyr)
@@ -23,6 +59,11 @@ df <- do.call(rbind, lapply(cyto_repos, function(pkg){
                           })
             )
 df1 <- df
+```
+
+## CYTO repo build status
+
+```{r, echo=FALSE}
 df[,1:3] %>% mutate(release := "", devel := "") %>% 
   kbl(booktabs = T) %>%
   kable_paper(full_width = F) %>%
@@ -30,5 +71,4 @@ df[,1:3] %>% mutate(release := "", devel := "") %>%
   column_spec(2, image = df1$release)%>%
   column_spec(3, image = df1$devel)
 ```
-
 
