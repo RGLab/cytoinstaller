@@ -2,9 +2,9 @@
 title: "cytoinstaller"
 author: "mike"
 date: "11/15/2020"
-output: 
-  html_document: 
-    keep_md: yes
+output:
+  github_document:
+always_allow_html: true
 ---
 
 
