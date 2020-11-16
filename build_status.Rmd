@@ -1,0 +1,34 @@
+---
+title: "build status"
+author: "mike"
+date: "11/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(cytoinstaller)
+library(kableExtra)
+library(dplyr)
+cyto_repos <- getOption("cyto_repos")
+df <- do.call(rbind, lapply(cyto_repos, function(pkg){
+                            data.frame(package = pkg
+                                       , release = paste0("https://github.com/RGLab/", pkg, "/workflows/build/badge.svg?branch=release")
+                                       , devel = paste0("https://github.com/RGLab/", pkg, "/workflows/build/badge.svg?branch=master")
+                                       , link = paste0("https://github.com/RGLab/", pkg, "/actions") 
+                                      )
+                          })
+            )
+df1 <- df
+df[,1:3] %>% mutate(release := "", devel := "") %>% 
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(1, link = df1$link)%>%
+  column_spec(2, image = df1$release)%>%
+  column_spec(3, image = df1$devel)
+```
+
+
