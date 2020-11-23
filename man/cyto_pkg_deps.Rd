@@ -4,7 +4,7 @@
 \alias{cyto_pkg_deps}
 \title{Find all dependencies of a cyto package.}
 \usage{
-cyto_pkg_deps(pkdir = ".", ...)
+cyto_pkg_deps(pkdir = ".", bioc_ver = bioc_version(), ...)
 }
 \arguments{
 \item{pkdir}{path to a package directory , or to a package tarball}

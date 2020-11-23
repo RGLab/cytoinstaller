@@ -15,6 +15,7 @@ cyto_install_deps(
   build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"),
   build_manual = FALSE,
   build_vignettes = FALSE,
+  bioc_ver = bioc_version(),
   ...
 )
 }

@@ -21,5 +21,7 @@ cyto_pkg_github_url(
 get the download url of the package hosted as github release assets
 }
 \examples{
+\dontrun{
 cyto_pkg_github_url("ggcyto")
+}
 }

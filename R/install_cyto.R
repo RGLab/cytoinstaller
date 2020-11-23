@@ -38,7 +38,7 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
                       type = type,
                       ...)
   }
-  remote <- cyto_remote(pkg, type = type)
+  remote <- cyto_remote(pkg, type = type, ...)
 
   install_remote(remote,
                   dependencies = dependencies,

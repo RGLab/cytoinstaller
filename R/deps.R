@@ -11,7 +11,7 @@
 #' \dontrun{
 #' cyto_pkg_deps("../ggcyto/")
 #' }
-cyto_pkg_deps <- function(pkdir = ".", ...)
+cyto_pkg_deps <- function(pkdir = ".", bioc_ver = bioc_version(), ...)
 {
 
     #get deps from public repos (cran, bioc)
@@ -27,7 +27,7 @@ cyto_pkg_deps <- function(pkdir = ".", ...)
       remote <- deps[i, ][["remote"]][[1]]
 
       #compare the public remote with cytorepo
-      remote_new <- cyto_remote(package) #fetch pkg info from cyto remote repo
+      remote_new <- cyto_remote(package, bioc_ver = bioc_ver) #fetch pkg info from cyto remote repo
       if(!is.null(remote_new))
       {
         ver <- remote_sha(remote_new)
@@ -83,14 +83,15 @@ cyto_install_deps <- function(pkgdir = ".", dependencies = NA,
                          quiet = FALSE,
                          build = TRUE,
                          build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"),
-                         build_manual = FALSE, build_vignettes = FALSE,
-                         ...) {
+                         build_manual = FALSE, build_vignettes = FALSE
+                         , bioc_ver = bioc_version(), ...) {
 
   packages <- cyto_pkg_deps(
     pkgdir,
     repos = repos,
     dependencies = dependencies,
-    type = type
+    type = type,
+    bioc_ver = bioc_ver
   )
 
   dep_deps <- if (isTRUE(dependencies)) NA else dependencies
