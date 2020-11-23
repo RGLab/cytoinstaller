@@ -95,7 +95,9 @@ cyto_install_deps <- function(pkgdir = ".", dependencies = NA,
   )
 
   dep_deps <- if (isTRUE(dependencies)) NA else dependencies
-
+#packages with the same version number are marked for update. Need to filter them out. 
+  packages<-packages[packages$installed!=packages$available,]
+    
   update(
     packages,
     dependencies = dep_deps,
