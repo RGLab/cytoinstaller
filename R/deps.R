@@ -36,10 +36,12 @@ cyto_pkg_deps <- function(pkdir = ".", bioc_ver = bioc_version(), ...)
         if(diff1 %in% c(remotes:::BEHIND, remotes:::UNINSTALLED))
         {
           deps[i, "available"] = ver
-          deps[i, "diff"] = diff1
           deps[i, "is_cran"] = FALSE
           deps[i, ][["remote"]][[1]] = remote_new
         }
+        #update diff
+        deps[i, "diff"] = remotes:::compare_versions(deps[i, "installed"], ver, is_cran = TRUE)
+
       }
     }
 
@@ -95,11 +97,11 @@ cyto_install_deps <- function(pkgdir = ".", dependencies = NA,
   )
 
   dep_deps <- if (isTRUE(dependencies)) NA else dependencies
-#packages with the same version number are marked for update. Need to filter them out. 
+#packages with the same version number are marked for update. Need to filter them out.
   keep<-(packages$installed==packages$available)
   keep<-is.na(keep)|keep
   packages<-packages[keep,]
-    
+
   update(
     packages,
     dependencies = dep_deps,
