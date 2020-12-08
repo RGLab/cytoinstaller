@@ -4,7 +4,7 @@
 \alias{desc_to_local}
 \title{Download DESCRIPTION file of the pkg from cyto repo}
 \usage{
-desc_to_local(pkg)
+desc_to_local(pkg, bioc_ver = bioc_version(), ...)
 }
 \arguments{
 \item{pkg}{package name.}

@@ -28,7 +28,7 @@ install_cyto <- function(pkg = NULL, type = getOption("pkgType"),
     write.dcf(dcf, file = file.path(pkgdir, "DESCRIPTION"))
   }else
   {
-    pkgdir <- desc_to_local(pkg)
+    pkgdir <- desc_to_local(pkg, ...)
   }
   on.exit({
     unlink(pkgdir, recursive = TRUE)

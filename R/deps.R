@@ -49,14 +49,34 @@ cyto_pkg_deps <- function(pkdir = ".", bioc_ver = bioc_version(), ...)
   deps
 }
 
+#' @importFrom remotes download
+bioconductor_release <- function() {
+  tmp <- tempfile()
+  download(tmp, download_url("bioconductor.org/config.yaml"), quiet = TRUE)
+
+  gsub("release_version:[[:space:]]+\"([[:digit:].]+)\"", "\\1",
+       grep("release_version:", readLines(tmp), value = TRUE))
+}
+
+normalize_bioc_ver <- function(ver){
+  if(tolower(ver) == "release")
+    BIOC_RELEASE
+  else if(tolower(ver) == "devel")
+    BIOC_DEV
+  else
+    ver
+}
 #' Download DESCRIPTION file of the pkg from cyto repo
 #' @param pkg package name.
-desc_to_local <- function(pkg){
+desc_to_local <- function(pkg, bioc_ver = bioc_version(), ...){
+  bioc_ver <- normalize_bioc_ver(bioc_ver)
   #download DESC file
   pkdir <- tempfile()
   dir.create(pkdir)
-  bioc_ver = bioc_version()
-  branch <- paste0("bioc_", bioc_ver)
+  if(bioc_ver == BIOC_DEV)
+    branch <- "master"
+  else
+    branch <- "release"
   owner = getOption("cyto_repo_owner")
   url <- file.path("https://raw.githubusercontent.com", owner, pkg, branch, "DESCRIPTION")
   download.file(url, file.path(pkdir, "DESCRIPTION"), quiet = TRUE)
