@@ -159,13 +159,19 @@ cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_
   nfiles <- sum(idx)
   if(nfiles == 0)
     return(NULL)
-  else if(nfiles > 1)
+  else
   {
-    return(NULL)#todo: maybe get the latest version
-  }else
-
-    asset <- assets[[which(idx)]]
-
-  ver <- sub(paste0("^", pkg, "_"), "", sub(paste0("\\.", suffix, "$"), "",  asset[["name"]]))
+    #get latest ver
+    vers <- sapply(asset.names[idx], get_ver_from_asset_name, pkg = pkg, suffix = suffix)
+    idx.max <- which(vers == max(vers))
+    if(length(idx.max) > 1)
+      stop("duplicated max versions!")
+    asset <- assets[idx][[idx.max]]
+    ver <- vers[idx.max]
+  }
   list(ver = ver, url = asset[["browser_download_url"]], bioc_ver = bioc_ver)
+}
+
+get_ver_from_asset_name <- function(name, pkg, suffix){
+  sub(paste0("^", pkg, "_"), "", sub(paste0("\\.", suffix, "$"), "",  name))
 }
