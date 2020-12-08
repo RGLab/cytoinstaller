@@ -151,6 +151,7 @@ as_tibble.cyto_remote <- function(x, ...) {
 #' }
 cyto_pkg_github_url <- function(pkg, owner = getOption("cyto_repo_owner"), bioc_ver = bioc_version())
 {
+  bioc_ver <- normalize_bioc_ver(bioc_ver)
   releaseid <- try(gh("GET /repos/:owner/:repo/releases/tags/:tag"
                       , owner = owner, repo = pkg, tag = paste0("bioc_",bioc_ver)
                       )$id

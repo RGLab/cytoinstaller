@@ -13,9 +13,21 @@
 #' }
 cyto_pkg_deps <- function(pkdir = ".", bioc_ver = bioc_version(), ...)
 {
+  bioc_ver <- normalize_bioc_ver(bioc_ver)
 
-    #get deps from public repos (cran, bioc)
+  #get deps from public repos (cran, bioc)
+  ###################
+
+  ## use envir to tell dev_package_deps to pick right bioc_ver
+  ## since it currently doesn't take bioc_ver argument
+  old.v <- Sys.getenv("R_BIOC_VERSION", "")
+  Sys.setenv(R_BIOC_VERSION = as.character(bioc_ver))
+
   deps <- dev_package_deps(pkdir, ...)
+
+  Sys.setenv(R_BIOC_VERSION = old.v)#restore old v
+
+
   #update it with github release version (when it is higher version)
   cyto_repos <- getOption("cyto_repos")
   for(i in seq_len(nrow(deps)))
@@ -49,14 +61,6 @@ cyto_pkg_deps <- function(pkdir = ".", bioc_ver = bioc_version(), ...)
   deps
 }
 
-#' @importFrom remotes download
-bioconductor_release <- function() {
-  tmp <- tempfile()
-  download(tmp, download_url("bioconductor.org/config.yaml"), quiet = TRUE)
-
-  gsub("release_version:[[:space:]]+\"([[:digit:].]+)\"", "\\1",
-       grep("release_version:", readLines(tmp), value = TRUE))
-}
 
 normalize_bioc_ver <- function(ver){
   if(tolower(ver) == "release")
@@ -107,6 +111,7 @@ cyto_install_deps <- function(pkgdir = ".", dependencies = NA,
                          build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"),
                          build_manual = FALSE, build_vignettes = FALSE
                          , bioc_ver = bioc_version(), ...) {
+  bioc_ver <- normalize_bioc_ver(bioc_ver)
 
   packages <- cyto_pkg_deps(
     pkgdir,
