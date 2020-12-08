@@ -5,7 +5,7 @@
 \title{Attempts to install a package from cyto repo}
 \usage{
 install_cyto(
-  pkg,
+  pkg = NULL,
   type = getOption("pkgType"),
   dependencies = NA,
   upgrade = c("default", "ask", "always", "never"),
@@ -19,6 +19,8 @@ install_cyto(
 )
 }
 \arguments{
+\item{pkg}{The cyto package name, when not supplied, it tries to update all cyto packages}
+
 \item{build}{If `TRUE` build the package before installing.}
 
 \item{build_opts}{Options to pass to `R CMD build`, only used when `build`}
@@ -31,8 +33,7 @@ is `TRUE}
 \item{...}{additional arguments passed to [utils::install.packages()].}
 }
 \description{
-This function is vectorised on `pkgs` so you can install multiple
-packages in a single command.
+Attempts to install a package from cyto repo
 }
 \examples{
 \dontrun{

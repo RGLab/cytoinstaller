@@ -1,9 +1,7 @@
 
 #' Attempts to install a package from cyto repo
 #'
-#' This function is vectorised on `pkgs` so you can install multiple
-#' packages in a single command.
-#'
+#' @param pkg The cyto package name, when not supplied, it tries to update all cyto packages
 #' @inheritParams cyto_install_deps
 #' @importFrom remotes install_remote
 #' @export
@@ -12,7 +10,7 @@
 #' \dontrun{
 #' install_cyto("ggcyto")
 #' }
-install_cyto <- function(pkg, type = getOption("pkgType"),
+install_cyto <- function(pkg = NULL, type = getOption("pkgType"),
                          dependencies = NA,
                          upgrade = c("default", "ask", "always", "never"),
                          force = FALSE,
@@ -20,12 +18,24 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
                          build = TRUE, build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"),
                          build_manual = FALSE, build_vignettes = FALSE,
                          ...) {
-  if(!isFALSE(dependencies))
+  if(is.null(pkg))
+  {
+  #create dummy pkg dcf to include all cyto packages as deps
+    dcf <- read.dcf(file = system.file("DESCRIPTION", package = "cytoinstaller"))
+    dcf[1, ][["Imports"]] <- paste(getOption("cyto_repos"), collapse = ".\n")
+    pkgdir <- tempfile()
+    dir.create(pkgdir)
+    write.dcf(dcf, file = file.path(pkgdir, "DESCRIPTION"))
+  }else
   {
     pkgdir <- desc_to_local(pkg)
-    on.exit({
-      unlink(pkgdir, recursive = TRUE)
-    })
+  }
+  on.exit({
+    unlink(pkgdir, recursive = TRUE)
+  })
+  if(!isFALSE(dependencies))
+  {
+
     cyto_install_deps(pkgdir,
                       dependencies = dependencies,
                       upgrade = upgrade,
@@ -38,20 +48,25 @@ install_cyto <- function(pkg, type = getOption("pkgType"),
                       type = type,
                       ...)
   }
-  remote <- cyto_remote(pkg, type = type, ...)
 
-  install_remote(remote,
-                  dependencies = dependencies,
-                  upgrade = upgrade,
-                  force = force,
-                  quiet = quiet,
-                  build = build,
-                  build_opts = build_opts,
-                  build_manual = build_manual,
-                  build_vignettes = build_vignettes,
-                  repos = repos,
-                  type = type,
-                  ...)
+  if(!is.null(pkg))
+  {
+
+    remote <- cyto_remote(pkg, type = type, ...)
+
+    install_remote(remote,
+                    dependencies = dependencies,
+                    upgrade = upgrade,
+                    force = force,
+                    quiet = quiet,
+                    build = build,
+                    build_opts = build_opts,
+                    build_manual = build_manual,
+                    build_vignettes = build_vignettes,
+                    repos = repos,
+                    type = type,
+                    ...)
+  }
 }
 
 #' construct a 'cyto_remote' object
