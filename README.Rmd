@@ -27,6 +27,13 @@ To install the latest version of a cyto package (and also install or update its 
 cytoinstaller::install_cyto("ggcyto")
 ```
 
+To install/update all cyto packages
+```r
+cytoinstaller::install_cyto()
+#select bioc version manually
+cytoinstaller::install_cyto(bioc_ver = "devel")
+```
+
 To get the package info from `CYTO` repo,
 
 ```r

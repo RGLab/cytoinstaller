@@ -9,6 +9,7 @@
 #' @examples
 #' \dontrun{
 #' install_cyto("ggcyto")
+#' install_cyto()#install/update all cyto packages
 #' }
 install_cyto <- function(pkg = NULL, type = getOption("pkgType"),
                          dependencies = NA,
@@ -22,7 +23,7 @@ install_cyto <- function(pkg = NULL, type = getOption("pkgType"),
   {
   #create dummy pkg dcf to include all cyto packages as deps
     dcf <- read.dcf(file = system.file("DESCRIPTION", package = "cytoinstaller"))
-    dcf[1, ][["Imports"]] <- paste(getOption("cyto_repos"), collapse = ".\n")
+    dcf[1, ][["Imports"]] <- paste(getOption("cyto_repos"), collapse = ",\n")
     pkgdir <- tempfile()
     dir.create(pkgdir)
     write.dcf(dcf, file = file.path(pkgdir, "DESCRIPTION"))
