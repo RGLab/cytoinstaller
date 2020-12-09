@@ -82,6 +82,37 @@ devel
 
 <td style="text-align:left;">
 
+<a href="https://github.com/RGLab/RProtoBufLib/actions"> RProtoBufLib
+</a>
+
+</td>
+
+<td style="text-align:left;">
+
+<img src="https://github.com/RGLab/RProtoBufLib/workflows/build/badge.svg?branch=release">
+
+</td>
+
+<td style="text-align:left;">
+
+<html>
+
+<body>
+
+<img src="https://github.com/RGLab/RProtoBufLib/workflows/build/badge.svg?branch=master">
+
+</body>
+
+</html>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 <a href="https://github.com/RGLab/cytolib/actions"> cytolib </a>
 
 </td>
